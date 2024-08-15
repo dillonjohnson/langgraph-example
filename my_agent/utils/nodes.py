@@ -3,6 +3,7 @@ from functools import lru_cache
 from langchain_openai import ChatOpenAI
 from my_agent.utils.tools import tools
 from langgraph.prebuilt import ToolNode
+from my_agent.utils.state import AgentState
 
 
 @lru_cache(maxsize=4)
@@ -29,7 +30,18 @@ def should_continue(state):
         return "continue"
 
 
-system_prompt = """Be a helpful assistant"""
+system_prompt = """Help define the business valuation about a tool. 
+
+You MUST ask questions to the Aider tool and steer the chat.
+
+You MUST NOT wait for additional user prompts.
+
+Aider's goal is the following.
+Create a Description.md which contains a description on what the purpose 
+of this repository is, where and what role it plays in its organisation
+and what weight it has.
+
+Once you have a business valuation in USD, you can stop."""
 
 # Define the function that calls the model
 def call_model(state, config):
